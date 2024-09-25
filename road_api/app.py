@@ -2,11 +2,19 @@ import firebase_admin
 from firebase_admin import credentials, db
 from flask import Flask, request, jsonify
 import time
+import os
+import json
 
 app = Flask(__name__)
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate(r'/home/shreyash/Desktop/EAPL2/API/log-object-detection-firebase-adminsdk-svcpu-60fc7079cc.json')
+firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')  # Get encoded Firebase credentials from environment
+if firebase_credentials:
+    cred_dict = json.loads(firebase_credentials)  # Parse the encoded credentials JSON string
+    cred = credentials.Certificate(cred_dict)
+else:
+    raise ValueError("Firebase credentials not found. Please set FIREBASE_CREDENTIALS environment variable.")
+
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://log-object-detection-default-rtdb.firebaseio.com/'
 })
@@ -71,4 +79,5 @@ def store_distance():
 
 # Main entry point of the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.getenv('PORT', 5000))  # Railway sets the PORT environment variable
+    app.run(debug=True, host='0.0.0.0', port=port)
