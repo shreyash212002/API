@@ -6,7 +6,7 @@ import time
 app = Flask(__name__)
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate(r'C:\Users\ES\OneDrive\Desktop\ADAS\log-object-detection-firebase-adminsdk-svcpu-2a933d9402.json')
+cred = credentials.Certificate(r'/home/shreyash/Downloads')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://log-object-detection-default-rtdb.firebaseio.com/'
 })
